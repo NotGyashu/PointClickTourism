@@ -151,4 +151,4 @@ const PaymentDialogue = ({ cart, onClose }) => {
   );
 };
 
-export default PaymentDialogue;
+export default PaymentDialogue; 
