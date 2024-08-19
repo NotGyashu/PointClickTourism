@@ -12,6 +12,7 @@ const CartMain = () => {
   const [editableItemId, setEditableItemId] = useState(null);
   const [editedItem, setEditedItem] = useState({});
   const [showPaymentDialogue, setShowPaymentDialogue] = useState(false);
+  const [selectedItems, setSelectedItems] = useState({});
 
   const handleEditClick = (item) => {
     setEditableItemId(item.id);
@@ -36,8 +37,20 @@ const CartMain = () => {
     updateQuantity(itemId, newQuantity);
   };
 
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems((prev) => ({
+      ...prev,
+      [itemId]: !prev[itemId],
+    }));
+  };
+
   const handleCheckout = () => {
-    setShowPaymentDialogue(true);
+    const itemsToPay = cart.filter((item) => selectedItems[item.id]);
+    if (itemsToPay.length === 0) {
+      alert("Select at least one item");
+    } else {
+      setShowPaymentDialogue(true);
+    }
   };
 
   const handleCloseDialogue = () => {
@@ -54,6 +67,12 @@ const CartMain = () => {
           {cart.map((item) => (
             <div key={item.id} className="bg-[white] rounded-lg shadow-md p-4">
               <div className="flex gap-1 items-center">
+                <input
+                  type="checkbox"
+                  checked={!!selectedItems[item.id]}
+                  onChange={() => handleCheckboxChange(item.id)}
+                  className="mr-2"
+                />
                 <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                 <p className="mb-2">({item.packageName})</p>
               </div>
@@ -172,7 +191,10 @@ const CartMain = () => {
 
       {/* Render the PaymentDialogue component if showPaymentDialogue is true */}
       {showPaymentDialogue && (
-        <PaymentDialogue cart={cart} onClose={handleCloseDialogue} />
+        <PaymentDialogue
+          cart={cart.filter((item) => selectedItems[item.id])}
+          onClose={handleCloseDialogue}
+        />
       )}
     </div>
   );
