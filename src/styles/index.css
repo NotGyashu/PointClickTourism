@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Ephesis&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+.ephesis-regular {
+  font-family: "Ephesis", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+
+.urbanist-<uniquifier> {
+  font-family: "Urbanist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+body {
+  font-family: "Urbanist", sans-serif;
+  font-optical-sizing: auto;
+  background-color: #f5f3f4;
+ 
+  
+}
+/* WebKit browsers (Chrome, Safari) */
+.scrollable::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+/* Firefox */
+.scrollable {
+  scrollbar-width: none; /* Hide scrollbar */
+}
+
+/* Edge and Internet Explorer */
+.scrollable {
+  -ms-overflow-style: none; /* Hide scrollbar */
+}
+
+
+.scroll-content {
+  animation: scroll 20s linear infinite;
+}
+
+.scroll-container:hover .scroll-content {
+  animation-play-state: paused; /* Pause scrolling on hover */
+}
+
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Add this CSS to your styles */
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.image-slide.active {
+  opacity: 1;
+  animation: slide-in 1s ease-in-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.image-slide.previous {
+  animation: slide-out 1s ease-in-out;
+}
+
+/* This will make the DatePicker input field match the appearance of the select field */
+.custom-date-picker .react-datepicker-wrapper,
+.custom-date-picker .react-datepicker__input-container input {
+  appearance: none;
+  width: 100%;
+ 
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #4a4a4a;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-date-picker .react-datepicker-wrapper input:focus {
+  outline: none;
+  border-color: #FFD700;
+  box-shadow: 0 0 0 1px #FFD700;
+}
+
+/* Ensure padding and border-radius match other inputs */
+.custom-date-picker input {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Add any additional styles as needed */
+
+.bullet-custom-color::marker {
+  color: #d97706; /* Replace with your desired color */
+}
+
+
+@media (min-width: 640px) {
+  .line > *:not(:last-child)::after {
+    content: " | ";
+    margin-left: 0.5rem; /* Adjust spacing as needed */
+    margin-right: 0.5rem; /* Adjust spacing as needed */
+    color: #000; /* Adjust color as needed */
+  }
+}
+
+
+
+/* ImageBanner.css */
+
+.slide-enter {
+  transform: translateX(100%);
+}
+
+.slide-enter-active {
+  transform: translateX(0);
+	transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
+}
+
+.slide-exit {
+  transform: translateX(0);
+}
+
+.slide-exit-active {
+  transform: translateX(-100%);
+	transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
+}
