@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useCartStore from "../../Utlis/USeCart";
+import PaymentDialogue from "./PaymentDialogue";
 
 const CartMain = () => {
   const cart = useCartStore((state) => state.cart);
@@ -10,6 +11,7 @@ const CartMain = () => {
 
   const [editableItemId, setEditableItemId] = useState(null);
   const [editedItem, setEditedItem] = useState({});
+  const [showPaymentDialogue, setShowPaymentDialogue] = useState(false);
 
   const handleEditClick = (item) => {
     setEditableItemId(item.id);
@@ -35,11 +37,15 @@ const CartMain = () => {
   };
 
   const handleCheckout = () => {
-    alert("Proceeding to checkout...");
+    setShowPaymentDialogue(true);
+  };
+
+  const handleCloseDialogue = () => {
+    setShowPaymentDialogue(false);
   };
 
   return (
-    <div className=" rounded flex-grow px-14 py-6 shadow-md">
+    <div className="rounded flex-grow px-14 py-6 shadow-md">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
       {cart.length === 0 ? (
         <p className="text-lg text-gray-500">Your cart is empty</p>
@@ -49,10 +55,10 @@ const CartMain = () => {
             <div key={item.id} className="bg-[white] rounded-lg shadow-md p-4">
               <div className="flex gap-1 items-center">
                 <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className=" mb-2">({item.packageName})</p>
+                <p className="mb-2">({item.packageName})</p>
               </div>
-              <div className="">
-                <div className=" font-medium text-gray-500"> Details:</div>
+              <div>
+                <div className="font-medium text-gray-500">Details:</div>
                 {editableItemId === item.id ? (
                   <>
                     <label className="text-gray-700">Date: </label>
@@ -163,6 +169,11 @@ const CartMain = () => {
       >
         Proceed to Checkout
       </button>
+
+      {/* Render the PaymentDialogue component if showPaymentDialogue is true */}
+      {showPaymentDialogue && (
+        <PaymentDialogue cart={cart} onClose={handleCloseDialogue} />
+      )}
     </div>
   );
 };
