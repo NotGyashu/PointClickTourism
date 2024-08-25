@@ -23,7 +23,7 @@ const TourCard = ({ tour }) => {
         <img
           src={tourImage}
           className="h-full w-full object-cover transition-transform transform "
-          alt={tour.title || "Tour image"}
+          alt={tour.name || "Tour image"}
         ></img>
         <button className="absolute top-[10%] p-1 text-sm font-bold right-1 border rounded-md bg-yellow-100 text-black">
           {tour.tag}
@@ -33,7 +33,7 @@ const TourCard = ({ tour }) => {
       <div className="p-4 h-[43%] flex flex-col hover:bg-[#faf3e1] ">
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <span className="font-semibold">{tour.title}</span>
+            <span className="font-semibold">{tour.name}</span>
             <span className="font-semibold">{tour.location}</span>
             <div className="flex items-center">
               {Array(fullStars)
@@ -59,14 +59,14 @@ const TourCard = ({ tour }) => {
                   />
                 ))}
             </div>
-            <span className="text-sm">{tour.numberOfReviews} reviews</span>
+            <span className="text-sm">{tour.noOfReviews} reviews</span>
           </div>
           <div className="flex flex-col text-right">
             <button className="font-bold border rounded-md px-1 mb-2">
               Book Now
             </button>
-            <span>AED {tour.price}.00</span>
-            <span className="text-sm">{tour.duration} hours</span>
+            <span>AED {tour.basePrice.adult}.00</span>
+            <span className="text-sm">{tour.noOfHours} hours</span>
           </div>
         </div>
       </div>

@@ -26,19 +26,15 @@ body {
  
   
 }
-/* WebKit browsers (Chrome, Safari) */
+.scrollable {
+  overflow: auto; /* Enable scrolling */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  scrollbar-width: none; /* For Firefox */
+}
+
 .scrollable::-webkit-scrollbar {
-  display: none; /* Hide scrollbar */
-}
-
-/* Firefox */
-.scrollable {
-  scrollbar-width: none; /* Hide scrollbar */
-}
-
-/* Edge and Internet Explorer */
-.scrollable {
-  -ms-overflow-style: none; /* Hide scrollbar */
+  display: none; /* For Chrome, Safari, and Edge */
 }
 
 

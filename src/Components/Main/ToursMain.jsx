@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TourCard from "../Sub/TourCard";
+import { MockActivityDetails } from "../Mock";
 
 const ToursMain = () => {
   const [tours, setTours] = useState([]);
@@ -10,8 +11,9 @@ const ToursMain = () => {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const res = await axios.get("/api/tours/get-all-activity");
-        setTours(res.data);
+        // const res = await axios.get("/api/tours/get-all-activity");
+        // setTours(res.data);
+        setTours(MockActivityDetails);
         setLoading(false);
       } catch (err) {
         setError("An error occurred while fetching tours.");

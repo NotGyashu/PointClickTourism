@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { v4 as uuidv4 } from "uuid"; // Import UUID for unique ID generation
 
 // Function to save cart to localStorage
 const saveCartToLocalStorage = (cart) => {
@@ -28,51 +29,33 @@ const useCartStore = create((set, get) => ({
             item.transferOption === tour.transferOption &&
             item.adult === tour.adult &&
             item.child === tour.child &&
-            item.infant === tour.infant
+            item.infant === tour.infant&&
+            item.activityId === tour.activityId
         );
 
-        if (existingTour) {
-          // Update quantity of the existing tour
-          updatedCart = updatedCart.map((item) =>
-            item.packageName === tour.packageName &&
-            item.tourDate === tour.tourDate &&
-            item.transferOption === tour.transferOption &&
-            item.adult === tour.adult &&
-            item.child === tour.child &&
-            item.infant === tour.infant
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          );
-        } else {
-          // Add new tour to cart
-          updatedCart.push({ ...tour, quantity: 1 });
-        }
+        
+          // Add new tour to cart with a unique ID
+          updatedCart.push({ ...tour, cartId: uuidv4(), quantity: 1 });
+        
       });
 
       saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
       return { cart: updatedCart };
     }),
 
-  removeFromCart: (tourId) =>
+  removeFromCart: (cartId) =>
     set((state) => {
-      const updatedCart = state.cart.filter((item) => item.id !== tourId);
+      const updatedCart = state.cart.filter((item) => item.cartId !== cartId);
       saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
       return { cart: updatedCart };
     }),
 
-  updateQuantity: (tourId, quantity) =>
-    set((state) => {
-      const updatedCart = state.cart.map((item) =>
-        item.id === tourId ? { ...item, quantity } : item
-      );
-      saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
-      return { cart: updatedCart };
-    }),
+  
 
   updateCart: (updatedItem) =>
     set((state) => {
       const updatedCart = state.cart.map((item) =>
-        item.id === updatedItem.id ? updatedItem : item
+        item.cartId === updatedItem.cartId ? updatedItem : item
       );
       saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
       return { cart: updatedCart };
@@ -83,10 +66,7 @@ const useCartStore = create((set, get) => ({
     return set({ cart: [] });
   },
 
-  total: () => {
-    const { cart } = get();
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  },
+ 
 }));
 
 export default useCartStore;

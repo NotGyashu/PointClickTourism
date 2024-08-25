@@ -16,46 +16,65 @@ const BookingForm = ({ tour }) => {
     setIsFormValid(
       Object.values(selections).some((selection) => selection.packageName)
     );
+    
   }, [selections]);
 
-  // Handle changes for each tour
-  const handleChange = (tourId, field, value) => {
-    setSelections((prevSelections) => {
-      const updatedSelections = {
-        ...prevSelections,
-        [tourId]: {
-          ...prevSelections[tourId],
-          [field]: value,
-        },
-      };
+ const handleChange = (tourId, field, value) => {
+   setSelections((prevSelections) => {
+     // Create a deep copy of the previous selections
+     const updatedSelections = {
+       ...prevSelections,
+       [tourId]: {
+         ...prevSelections[tourId],
+         [field]: value,
+       },
+     };
 
-      // If the packageName is selected, set default values
-      if (field === "packageName" && value) {
-        updatedSelections[tourId] = {
-          packageName: value,
-          transferOption:
-            updatedSelections[tourId]?.transferOption || "Transfer 1",
-          tourDate:
-            updatedSelections[tourId]?.tourDate ||
-            new Date().toISOString().split("T")[0],
-          adult: updatedSelections[tourId]?.adult || "1",
-          child: updatedSelections[tourId]?.child || "0",
-          infant: updatedSelections[tourId]?.infant || "0",
-          totalAmount: calculateTotalAmount(
-            updatedSelections[tourId],
-            tour.basePrice
-          ),
-        };
-      }
+     // Set default values if packageName is selected
+     if (field === "packageName" && value) {
+       updatedSelections[tourId] = {
+         ...updatedSelections[tourId],
+         packageName: value,
+         transferOption: updatedSelections[tourId]?.transferOption || "option1",
+         tourDate:
+           updatedSelections[tourId]?.tourDate ||
+           new Date().toISOString().split("T")[0],
+         adult: updatedSelections[tourId]?.adult || "1",
+         child: updatedSelections[tourId]?.child || "0",
+         infant: updatedSelections[tourId]?.infant || "0",
+       };
+     }
 
-      return updatedSelections;
-    });
-  };
+     // Immediately calculate and set the total amount
+     const totalAmount = calculateTotalAmount(tourId, updatedSelections);
+     updatedSelections[tourId].totalAmount = totalAmount;
 
-  const calculateTotalAmount = (selection, basePrice) => {
-    const { adult = 1, child = 0, infant = 0 } = selection;
-    return basePrice * (parseInt(adult) + parseInt(child) + parseInt(infant));
-  };
+     console.log("Updated Selections:", updatedSelections);
+     return updatedSelections;
+   });
+ };
+
+ // Adjust calculateTotalAmount to accept selections as a parameter
+ const calculateTotalAmount = (tourId, updatedSelections) => {
+   // Use the passed-in updatedSelections
+   const selection = updatedSelections[tourId] || {};
+   const { adult = 1, child = 0, infant = 0, transferOption = "" } = selection;
+
+   const transferOptions = tour?.transferOptions || [];
+   const transferCharge =
+     transferOptions.find((option) => option.option === transferOption)
+       ?.charge || 0;
+
+   const basePrice = tour?.basePrice || { adult: 0, child: 0, infant: 0 };
+   const totalAmount =
+     basePrice.adult * parseInt(adult) +
+     basePrice.child * parseInt(child) +
+     basePrice.infant * parseInt(infant) +
+     transferCharge;
+
+   return Number(totalAmount) || 0;
+ };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,26 +82,25 @@ const BookingForm = ({ tour }) => {
       // Convert the selections object to an array of objects for cart
       const cartItems = Object.entries(selections).map(([id, selection]) => ({
         ...selection,
-        id: id,
-        title: tour.title,
-        price: tour.price,
+        title: tour.name,
+        image: tour.images[0],
       }));
-    console.log(cartItems)
-     addToCart(cartItems)
+
+      console.log(cartItems);
+      addToCart(cartItems);
       navigate("/cart");
     } catch (err) {
       console.error("An error occurred:", err);
     }
   };
 
-
   if (!tour) return <div>Loading...</div>;
-
+  
   return (
     <div className="border sm:p-3 md:p-5  p-1 shadow-md bg-white ">
-      <h2 className="text-xl font-bold mb-4">{tour.title} Prices & Offers</h2>
+      <h2 className="text-xl font-bold mb-4">{tour.name} Prices & Offers</h2>
       <form onSubmit={handleSubmit}>
-        <Table selections={selections} onSelectionChange={handleChange} />
+        <Table selections={selections} onSelectionChange={handleChange} tour = {tour}/>
         <button
           type="submit"
           disabled={!isFormValid}
@@ -99,19 +117,8 @@ const BookingForm = ({ tour }) => {
   );
 };
 
-const Table = ({ selections, onSelectionChange }) => {
-  const sampleTours = [
-    { activityId: 1, type: "Tour 1", basePrice: 100 },
-    { activityId: 2, type: "Tour 2", basePrice: 150 },
-  ];
-
-  const calculateTotalAmount = (tour) => {
-    const selection = selections[tour.activityId] || {};
-    const { adult = 0, child = 0, infant = 0 } = selection;
-    return (
-      tour.basePrice * (parseInt(adult) + parseInt(child) + parseInt(infant))
-    );
-  };
+const Table = ({ selections, onSelectionChange,tour }) => {
+ 
 
   return (
     <div className="overflow-x-auto border border-yellow-200 rounded">
@@ -142,51 +149,48 @@ const Table = ({ selections, onSelectionChange }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-yellow-200">
-          {sampleTours.map((tour) => (
-            <tr key={tour.activityId} className="">
+          {tour.packagetype.map((tour) => (
+            <tr key={tour.id} className="">
               <td className="px-6 mt-1 py-4 flex gap-4 whitespace-nowrap text-sm text-gray-500">
                 <input
                   type="checkbox"
                   className="form-checkbox mt-1"
-                  checked={!!selections[tour.activityId]?.packageName}
+                  checked={!!selections[tour.id]?.packageName}
                   onChange={(e) =>
                     onSelectionChange(
-                      tour.activityId,
+                      tour.id,
                       "packageName",
-                      e.target.checked ? tour.type : ""
+                      e.target.checked ? tour.name : ""
                     )
                   }
                 />
-                <span>{tour.type}</span>
+                <span>{tour.name}</span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <select
                   className="form-select mt-1 block w-full border  rounded-lg p-1 focus:outline-none"
-                  value={selections[tour.activityId]?.transferOption || ""}
+                  value={selections[tour.id]?.transferOption || ""}
                   onChange={(e) =>
-                    onSelectionChange(
-                      tour.activityId,
-                      "transferOption",
-                      e.target.value
-                    )
+                    onSelectionChange(tour.id, "transferOption", e.target.value)
                   }
                 >
-                  <option value="">Select Transfer</option>
-                  <option value="transfer1">Transfer 1</option>
-                  <option value="transfer2">Transfer 2</option>
-                  <option value="transfer3">Transfer 3</option>
+                  {tour.transferOptions.map((optionObj, index) => (
+                    <option key={index} value={optionObj.option}>
+                      {optionObj.option}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <DatePicker
                   selected={
-                    selections[tour.activityId]?.tourDate
-                      ? new Date(selections[tour.activityId].tourDate)
+                    selections[tour.id]?.tourDate
+                      ? new Date(selections[tour.id].tourDate)
                       : new Date()
                   }
                   onChange={(date) =>
                     onSelectionChange(
-                      tour.activityId,
+                      tour.id,
                       "tourDate",
                       date.toISOString().split("T")[0]
                     )
@@ -199,45 +203,55 @@ const Table = ({ selections, onSelectionChange }) => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <select
                   className="form-select mt-1 block w-full border rounded-lg p-1 focus:outline-none"
-                  value={selections[tour.activityId]?.adult || "1"} // Default value to 1 if not set
+                  value={selections[tour.id]?.adult || "1"} // Default value to 1 if not set
                   onChange={(e) =>
-                    onSelectionChange(tour.activityId, "adult", e.target.value)
+                    onSelectionChange(tour.id, "adult", e.target.value)
                   }
                 >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <select
                   className="form-select mt-1 block w-full border rounded-lg p-1 focus:outline-none"
-                  value={selections[tour.activityId]?.child || "0"}
+                  value={selections[tour.id]?.child || "0"}
                   onChange={(e) =>
-                    onSelectionChange(tour.activityId, "child", e.target.value)
+                    onSelectionChange(tour.id, "child", e.target.value)
                   }
                 >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <select
                   className="form-select mt-1 block w-full border rounded-lg p-1 focus:outline-none"
-                  value={selections[tour.activityId]?.infant || "0"}
+                  value={selections[tour.id]?.infant || "0"}
                   onChange={(e) =>
-                    onSelectionChange(tour.activityId, "infant", e.target.value)
+                    onSelectionChange(tour.id, "infant", e.target.value)
                   }
                 >
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <span>${calculateTotalAmount(tour).toFixed(2)}</span>
+                <span>
+                  AED:
+                  {selections[tour.id]?.totalAmount
+                    ? selections[tour.id]?.totalAmount
+                    : "0"}
+                </span>
               </td>
             </tr>
           ))}

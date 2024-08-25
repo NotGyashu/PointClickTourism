@@ -80,7 +80,7 @@ const ActivityTop = ({ tour }) => {
       <div className="p-6 border flex flex-col md:flex-row items-start md:items-center gap-3">
         {/* Bottom text adjusts based on content */}
         <span className="text-lg md:text-xl font-semibold">
-          {tour?.title}, {tour?.location}
+          {tour?.name}, {tour?.location}
         </span>
         <div className="flex items-center">
           {Array(fullStars)
@@ -100,11 +100,11 @@ const ActivityTop = ({ tour }) => {
               <StarIcon key={`empty-${i}`} className="h-3 w-3 text-gray-300" />
             ))}
         </div>
-        <span className="text-sm">{tour?.numberOfReviews} reviews</span>
+        <span className="text-sm">{tour?.noOfReviews} reviews</span>
       </div>
       {/* Book Now */}
-      <div className="sm:absolute hidden sm:visible bottom-4 sm:flex flex-col px-4 py-2 right-4 bg-white text-black border shadow-md rounded-lg">
-        <div className="text-xs sm:text-sm md:text-base">
+      {/* <div className="sm:absolute hidden sm:visible bottom-4 sm:flex flex-col px-4 py-2 right-4 bg-white text-black border shadow-md rounded-lg"> */}
+        {/* <div className="text-xs sm:text-sm md:text-base">
           Choose Correct package:
         </div>
         <select
@@ -112,18 +112,19 @@ const ActivityTop = ({ tour }) => {
           name="example"
           className="border rounded-md focus:outline-none p-1 my-2 text-xs sm:text-sm md:text-base"
         >
+       
           <option value="">AED {tour.price} with transport</option>
           <option value="">AED {tour.price}</option>
           <option value="">AED {tour.price}.00</option>
-        </select>
+        </select> */}
 
-        <button className="p-1 bg-yellow-600 text-white font-bold rounded text-xs sm:text-sm md:text-base lg:text-lg">
+        <button className="p-1 bg-yellow-500 text-white font-bold  text-xs sm:text-sm md:text-base lg:text-lg">
           Book Now
         </button>
-      </div>
+      {/* </div> */}
 
       {/* Tag */}
-      <div className="absolute top-2 left-2 p-2 text-white bg-yellow-600 rounded-md font-semibold">
+      <div className="absolute top-2 left-2 p-2 text-white rounded-md bg-yellow-600 font-semibold">
         {tour.tag}
       </div>
     </div>

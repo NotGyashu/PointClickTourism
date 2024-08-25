@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import ActivityTop from "../Sub/ActivityTop";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import BookingForm from "../Sub/BookingForm";
+import BookingForm from "../Main/BookingForm";
 import ActivityDetails from "../Sub/ActivityDetails";
-
+import { MockActivityDetails } from "../Mock";
 const ActivityMain = () => {
   const [tour, setTour] = useState(null);
   const [overview, setOverview] = useState(null);
@@ -16,10 +16,11 @@ const ActivityMain = () => {
     const fetchTours = async () => {
       setLoading(true);
       try {
-        const res2 = await axios.get(`/api/tours/get-activity-info/${id}`);
-        setOverview(res2.data);
-        const res = await axios.get(`/api/tours/get-activity/${id}`);
-        setTour(res.data);
+        // const res2 = await axios.get(`/api/tours/get-activity-info/${id}`);
+        // setOverview(res2.data);
+        // const res = await axios.get(`/api/tours/get-activity/${id}`);
+        // setTour(res.data);
+        setTour(MockActivityDetails[0]);
       } catch (err) {
         setError("An error occurred while fetching the data.");
         console.error("An error occurred:", err);

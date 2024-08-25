@@ -7,8 +7,7 @@ const Actvity = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <ActivityMain />
-      
+      <ActivityMain />      
       <Footer />
     </div>
   );

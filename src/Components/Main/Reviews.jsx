@@ -7,28 +7,28 @@ import ReviewCard from "../Sub/ReviewCard";
 const Reviews = () => {
   const reviews = [
     {
-      id: 1,
+      id: 1010,
       name: "John Doe",
       review:
         "Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to ",
       star: 5,
     },
     {
-      id: 2,
+      id: 1020,
       name: "Jane Doe",
       review:
         "Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to ",
       star: 5,
     },
     {
-      id: 3,
+      id: 1030,
       name: "John Smith",
       review:
         "Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to ",
       star: 5,
     },
     {
-      id: 4,
+      id: 1040,
       name: "Jane Smith",
       review:
         "Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visitGreat place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to visit,Great place to ",
@@ -43,8 +43,8 @@ const Reviews = () => {
 
       <div className="  scroll-container flex  pr-6 p-2 scrollable  overflow-auto">
         <div className=" gap-6 flex  scroll-content">
-          {reviews.concat(reviews).map((review) => (
-            <div key={review.id} className="scroll-item ">
+          {reviews.concat(reviews).map((review,i) => (
+            <div key={review.i} className="scroll-item ">
               <ReviewCard review={review} />
             </div>
           ))}
