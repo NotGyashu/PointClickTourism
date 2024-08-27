@@ -29,7 +29,7 @@ const Header = () => {
             <a
               key={index}
               href={button.link}
-              className={` rounded-lg py-1 px-3 md:mx-3 ${
+              className={` rounded-lg py-1 px-3 md:mx-3 text-sm md:text-base ${
                 isActive
                   ? "bg-yellow-500 text-white"
                   : "text-gray-700 hover:underline hover:text-yellow-400"

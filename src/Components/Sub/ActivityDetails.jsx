@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 const ActivityDetails = ({ overview }) => {
-  const [visibleSections, setVisibleSections] = useState([]);
+  // Initialize all sections as visible by default
+  const [visibleSections, setVisibleSections] = useState(
+    Array.from({ length: 7 }, (_, index) => index)
+  );
 
   const {
     overview: overviewText = [],
@@ -32,19 +35,17 @@ const ActivityDetails = ({ overview }) => {
 
   return (
     <div className="bg-white rounded-md shadow-lg p-2 sm:p-4 md:p-6 flex flex-col gap-4">
-      <span className="text-2xl sm:text-3xl shadow-sm mb-4 ">
-        More Details
-      </span>
+      <span className="text-2xl sm:text-3xl shadow-sm mb-4">More Details</span>
       {orderedDetails.map(({ title, content }, index) => (
         <div
           key={index}
-          className="rounded-md shadow-sm shadow-[#d97706]  p-1 mb-2 "
+          className="rounded-md shadow-sm shadow-[#d97706] p-1 mb-2"
         >
           <div
             className="cursor-pointer flex justify-between items-center"
             onClick={() => toggleSection(index)}
           >
-            <span className="">{title}</span>
+            <span>{title}</span>
             <PlusIcon
               className={`h-5 w-5 text-[#d97706] transform transition-transform duration-500 ${
                 visibleSections.includes(index) ? "rotate-45" : "rotate-0"
@@ -70,7 +71,7 @@ const ActivityDetails = ({ overview }) => {
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-700 text-xs  sm:text-base mt-2">
+              <p className="text-gray-700 text-xs sm:text-base mt-2">
                 {content}
               </p>
             )}

@@ -16,8 +16,8 @@ const ActivityMain = () => {
     const fetchTours = async () => {
       setLoading(true);
       try {
-        // const res2 = await axios.get(`/api/tours/get-activity-info/${id}`);
-        // setOverview(res2.data);
+        const res2 = await axios.get(`/api/tours/get-activity-info/51881b5f8ebd4595a10c07fecc150233`);
+        setOverview(res2.data);
         // const res = await axios.get(`/api/tours/get-activity/${id}`);
         // setTour(res.data);
         setTour(MockActivityDetails[0]);
@@ -44,7 +44,7 @@ const ActivityMain = () => {
       {/* <Link to={`tours`} className="p-1 border bg-white shadow-md">Explore more tours</Link> */}
       <div className="w-full flex items-center justify-center mt-4">
         <Link
-          to={`tours`}
+          to={`/tours`}
           className="border p-2 rounded-md bg-yellow-400 text-white transition-colors duration-300
               text-xs md:text-base
                  

@@ -4,7 +4,7 @@ const CartCard = ({ item, onRemove, onEdit, isSelected, onCheckboxChange }) => {
   return (
     <div
       key={item.cartId}
-      className="bg-[white] grid grid-cols-5 grid-rows-3 rounded-lg shadow-md p-4 "
+      className="bg-[white] col-span-2 md:col-span-1 grid grid-cols-5 grid-rows-3 rounded-lg shadow-md md:p-4 p-2 "
     >
       <div className="flex col-span-4 row-span-1 gap-1 items-center ">
         <input

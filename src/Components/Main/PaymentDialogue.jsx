@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import LogoBlack from "../../../public/img/logo/logoBlack.jpeg";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
-const PaymentDialogue = ({ cart, onClose }) => {
+const PaymentDialogue = ({ cart, onClose,amount }) => {
   const [paymentDetails, setPaymentDetails] = useState({
     firstName: "",
     lastName: "",
@@ -28,12 +30,13 @@ const PaymentDialogue = ({ cart, onClose }) => {
     setLoading(true);
     setError("");
     try {
-      await axios.post("/api/payment", {
-        cart,
-        ...paymentDetails,
-      });
-      alert("Payment successful!");
-      onClose();
+      // await axios.post("/api/payment", {
+      //   cart,
+      //   ...paymentDetails,
+      // });
+      // alert("Payment successful!");
+      // onClose();
+      console.log(cart,paymentDetails)
     } catch (error) {
       setError("Payment failed. Please try again.");
     } finally {
@@ -42,18 +45,29 @@ const PaymentDialogue = ({ cart, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-[#f5f3f4] flex gap-3 box-border scrollable p-6 rounded-lg shadow-lg w-full h-full overflow-auto">
-        <div className="mb-4 w-[50%] scrollable">
-          <h2 className="text-2xl font-bold mb-4">Payment</h2>
-          <h3 className="text-xl font-semibold mb-2">Tour Details</h3>
+    <div className="fixed flex flex-col gap-3 inset-0 order bg-[#f5f3f4] z-50">
+      <div className=" p-4  bg-white col-span-1 ephesis-regular md:text-3xl text-xl font-bold flex  items-center gap-2 ">
+        <img
+          src={LogoBlack}
+          className="md:h-8 md:w-8 h-6 w-6 inline rounded-full"
+        />
+        Point Click Tourism
+      </div>
+      <div className="  grid grid-cols-1 md:grid-cols-2  gap-3 md:scrollable  box-border p-3 md:p-6 rounded-lg shadow-lg      w-full h-full  overflow-auto">
+        <div className="mb-4 col-span-1 md:scrollable">
+          <h2 className="text-xl md:text-2xl font-bold mb-4">Payment</h2>
+          <h3 className="text-lg md:text-xl font-semibold mb-2">
+            Tour Details
+          </h3>
           {cart.map((item) => (
             <div
               key={item.cartId}
-              className="bg-[white] grid my-7 mx-4  grid-cols-5 grid-rows-2 border rounded-lg shadow-md p-4"
+              className="bg-[white] grid my-7 md:mx-4 mx-2  grid-cols-5 grid-rows-2 border rounded-lg shadow-md p-2 md:p-4"
             >
               <div className="flex col-span-4 row-span-1 gap-1 items-center">
-                <h3 className="text-xl font-semibold">{item.title}</h3>
+                <h3 className="text-lg md:text-xl font-semibold">
+                  {item.title}
+                </h3>
                 <p className="">({item.packageName})</p>
               </div>
               <img src="" alt="img1" className="row-span-1 col-span-1 border" />
@@ -80,8 +94,11 @@ const PaymentDialogue = ({ cart, onClose }) => {
 
         <form
           onSubmit={handleSubmit}
-          className="w-[50%] bg-white grid grid-cols-2 p-10 border gap-4 justify-center items-center"
+          className="col-span-1 bg-white grid grid-cols-2 md:p-10 p-4 border gap-4 justify-center items-center"
         >
+          <div className="col-span-2 text-lg md:text-xl font-semibold ">
+            Enter Details:
+          </div>
           <div className="">
             <label className=" text-gray-700 text-sm" aria-label="First Name">
               First Name:
@@ -197,20 +214,20 @@ const PaymentDialogue = ({ cart, onClose }) => {
           )}
           <button
             type="submit"
-            className={`px-4 py-2 text-white rounded hover:bg-green-600 col-span-2 ${
-              loading ? "bg-gray-400" : "bg-green-500"
+            className={`px-4 py-2 text-white items-center rounded hover:bg-yellow-600 col-span-2 ${
+              loading ? "bg-gray-400" : "bg-yellow-500"
             }`}
             disabled={loading}
           >
-            {loading ? "Processing..." : "Pay"}
+            {loading ? `Processing... ` : `Pay ${amount}.00 AED`}
           </button>
         </form>
         <button
           onClick={onClose}
-          className="px-4 py-2 absolute top-4 right-4 bg-red-500 text-white rounded hover:bg-red-600"
+          className="p-1 absolute top-4 right-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
           aria-label="Close Payment Dialogue"
         >
-          Close
+          <XMarkIcon className="h-6 w-6" />
         </button>
       </div>
     </div>
